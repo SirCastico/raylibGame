@@ -1,5 +1,6 @@
 #include "../include/raylib.h"
 #include <stdio.h>
+#include <math.h>
 
 typedef struct Circle2D{
     Vector2 position;
@@ -17,34 +18,43 @@ Vector2 vector2Sum(Vector2 vec1, Vector2 vec2);
 float getDeltaTime();
 
 //fazer physicsprocess, chamado 60 vezes por segundo/delta fixado.
+//quando delta é maior que 0.016, contar quantas n vezes é maior e fazer a simulação n vezes
 
 int main(void)
 {
     const Vector2 screen = {.x=800, .y=450};
     Circle2D circle = newCircle(screen.x/2, screen.y/2, 100, 100, 50, BLACK);
     float delta;
+    float nTick = -1;
+    float phTick = 1.0/60;
 
     InitWindow(screen.x, screen.y, "gaming");
-    SetTargetFPS(60);
+    SetTargetFPS(10);
 
     while (!WindowShouldClose())
-    {
-        delta = getDeltaTime();
+    {   
+        // Processing Physics //
+        delta = GetFrameTime();
+        nTick += delta/phTick;
+        printf("%f\n", nTick);
+        while(nTick>=1){
+            circle = invertVelocityIfOnScreenEdge(moveCircle2D(circle, phTick), screen);
+            nTick--;
+        }
+        // End of Physics //
         BeginDrawing();
             ClearBackground(RAYWHITE);
             DrawFPS(10, 10);
-            circle = invertVelocityIfOnScreenEdge(moveCircle2D(circle, delta), screen);
             DrawCircle(circle.position.x, circle.position.y, circle.radius, circle.color);
         EndDrawing();
         //printf("%f : %f \n", circle.position.x, circle.position.y);
-        printf("%f\n", delta);
+        //printf("%f\n", delta);
     }
 
     CloseWindow();
 
     return 0;
 }
-
 
 Circle2D moveCircle2D(Circle2D circle, float delta){
     circle.position = vector2Sum(circle.position, floatVector2Mult(delta, circle.velocity));
@@ -96,14 +106,4 @@ Circle2D newCircle(float posX, float posY, float velX, float velY, float radius,
     };
 
     return circle;
-}
-
-float getDeltaTime(){
-    float delta = GetFrameTime();
-
-    if(delta>=.08){
-        delta = .08;
-    }
-
-    return delta;
 }
