@@ -29,14 +29,14 @@ int main(void)
     float phTick = 1.0/60;
 
     InitWindow(screen.x, screen.y, "gaming");
-    SetTargetFPS(10);
+    SetTargetFPS(60);
 
     while (!WindowShouldClose())
     {   
         // Processing Physics //
         delta = GetFrameTime();
         nTick += delta/phTick;
-        printf("%f\n", nTick);
+        //printf("%f\n", nTick);
         while(nTick>=1){
             circle = invertVelocityIfOnScreenEdge(moveCircle2D(circle, phTick), screen);
             nTick--;
