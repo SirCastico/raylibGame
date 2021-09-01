@@ -7,9 +7,8 @@ Object2D moveObject2D(Object2D object, float delta);
 Object2D invertVelocityIfOnScreenEdge(Object2D object, Vector2 screen);
 void physicsProcess(World2D *world, float delta, float *nTick);
 void updateWorldObjectsPosition(World2D *world, float phTick);
-
-Vector2 floatVector2Mult(float f, Vector2 vec);
-Vector2 vector2Sum(Vector2 vec1, Vector2 vec2);
+Vector2 getInputForce();
+void movePlayerObject2D(Object2D *player, float speed);
 
 
 Object2D moveObject2D(Object2D object, float delta){
@@ -38,20 +37,24 @@ Object2D invertVelocityIfOnScreenEdge(Object2D object, Vector2 screen){
     return object;
 }
 
-Vector2 vector2Sum(Vector2 vec1, Vector2 vec2){
-    vec1.x += vec2.x;
-    vec1.y += vec2.y;
 
-    return vec1;
+Vector2 getInputForce(){
+    Vector2 force;
+
+    force.x = IsKeyDown(KEY_D) - IsKeyDown(KEY_A);
+    force.y = IsKeyDown(KEY_S) - IsKeyDown(KEY_W);
+
+    force = normalizeVector2(force);
+
+    return force;
 }
 
-Vector2 floatVector2Mult(float f, Vector2 vec){
-    vec.x *= f;
-    vec.y *= f;
-    return vec;
+void movePlayerObject2D(Object2D *player, float speed){
+    Vector2 force = getInputForce();
+    force = floatVector2Mult(speed, force);
+
+    player->velocity = force;
 }
-
-
 
 void updateWorldObjectsPosition(World2D *world, float phTick){
     int i=0;
@@ -63,11 +66,15 @@ void updateWorldObjectsPosition(World2D *world, float phTick){
 }
 void physicsProcess(World2D *world, float delta, float *nTick){
     float phTick = 1.0/60;
+    float playerSpeed = 100;
+    Object2D *player = getPlayerFromWorld2D(*world); 
 
     *nTick += delta/phTick;
     //printf("%f\n", *nTick);
 
     while(*nTick>=1){
+        if(player)
+            movePlayerObject2D(getPlayerFromWorld2D(*world), playerSpeed);
         updateWorldObjectsPosition(world, phTick);
         *nTick = *nTick - 1;
     }
