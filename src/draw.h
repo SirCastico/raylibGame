@@ -4,6 +4,7 @@
 #define __DRAW_H__
 
 void drawObjCircle(Object2D circle);
-void drawWorldCircles(World2D world);
+void drawObjRECT(Object2D sq);
+void drawWorld(World2D world);
 
 #endif

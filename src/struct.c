@@ -4,9 +4,9 @@
 #include "struct.h"
 #include <stdio.h>
 
-
+Vector2 newVector(float x, float y);
 World2D newWorld2D(Vector2 screen);
-Object2D newObject2D(float posX, float posY, float velX, float velY, float radius, Color color, ObjectTag tag, ObjectShape shape);
+Object2D newObject2D(float posX, float posY, float velX, float velY, float width, float height, Color color, ObjectTag tag, ObjectShape shape);
 void pushObject2D(Object2D object, World2D *world);
 Vector2 vector2Sum(Vector2 vec1, Vector2 vec2);
 Vector2 floatVector2Mult(float f, Vector2 vec);
@@ -15,14 +15,18 @@ float getVector2Len(Vector2 vec);
 Vector2 normalizeVector2(Vector2 vec);
 Object2D *getPlayerFromWorld2D(World2D world);
 
+Vector2 newVector(float x, float y){
+    return (Vector2) {x,y};
+}
 
-Object2D newObject2D(float posX, float posY, float velX, float velY, float radius, Color color, ObjectTag tag, ObjectShape shape){
+Object2D newObject2D(float posX, float posY, float velX, float velY, float width, float height, Color color, ObjectTag tag, ObjectShape shape){
     Object2D object = {
         .position.x = posX,
         .position.y = posY,
         .velocity.x = velX,
         .velocity.y = velY,
-        .radius = radius,
+        .size.x = width,
+        .size.y = height,
         .color = color,
         .tag = tag,
         .shape = shape

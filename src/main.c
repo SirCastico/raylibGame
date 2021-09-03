@@ -7,15 +7,38 @@
 #include "draw.h"
 
 
+void initAndPushObjectsToWorld(World2D *world){
+    Object2D rect = {
+        .position = {0, 0},
+        .velocity = {0, 0},
+        .size = {50, 50},
+        .color = BLACK,
+        .tag = NOTPLAYER,
+        .shape = RECT
+    };
+    Object2D player = {
+        .position = {world->screen.x/2, world->screen.y/2},
+        .velocity = {0, 0},
+        .size = {10, 0},
+        .color = RED,
+        .tag = PLAYER,
+        .shape = CIRCLE
+    };
+
+    pushObject2D(rect, world);
+    pushObject2D(player, world);
+
+    //^ [NOTA] Os objetos talvez não sejam libertados após o push 
+
+}
+
 int main(void)
 {
     const Vector2 screen = {.x=800, .y=450};
     World2D world = newWorld2D(screen);
-    // [NOTA] Circle e Player iniciais são diferentes dos guardados no mundo
-    Object2D circle = newObject2D(screen.x/2, screen.y/2, 100, 100, 50, BLACK, NOTPLAYER, CIRCLE);
-    Object2D player = newObject2D(screen.x/2, screen.y/2+10, 0, 0, 50, RED, PLAYER, CIRCLE);
-    pushObject2D(circle, &world);
-    pushObject2D(player, &world);
+
+    initAndPushObjectsToWorld(&world);
+
     float delta;
     float nTick = -1;
 
@@ -28,12 +51,10 @@ int main(void)
 
         physicsProcess(&world, delta, &nTick);
 
-        //printf("%f %f\n", player.position.x, player.position.y);
-
         BeginDrawing();
             ClearBackground(RAYWHITE);
+            drawWorld(world);
             DrawFPS(10, 10);
-            drawWorldCircles(world);
         EndDrawing();
     }
 

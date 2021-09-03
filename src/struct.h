@@ -10,13 +10,13 @@ typedef enum ObjectTag{
 
 typedef enum ObjectShape{
     CIRCLE,
-    SQUARE
+    RECT
 }ObjectShape;
 
 typedef struct Object2D{
     Vector2 position;
     Vector2 velocity;
-    float radius;
+    Vector2 size;
     Color color;
     ObjectTag tag;
     ObjectShape shape;
@@ -28,8 +28,9 @@ typedef struct World2D{
     Vector2 screen;
 }World2D;
 
+Vector2 newVector(float x, float y);
 World2D newWorld2D(Vector2 screen);
-Object2D newObject2D(float posX, float posY, float velX, float velY, float radius, Color color, ObjectTag tag, ObjectShape shape);
+Object2D newObject2D(float posX, float posY, float velX, float velY, float width, float height, Color color, ObjectTag tag, ObjectShape shape);
 void pushObject2D(Object2D object, World2D *world);
 Vector2 vector2Sum(Vector2 vec1, Vector2 vec2);
 Vector2 floatVector2Mult(float f, Vector2 vec);
