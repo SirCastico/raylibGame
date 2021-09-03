@@ -28,8 +28,6 @@ void initAndPushObjectsToWorld(World2D *world){
     pushObject2D(rect, world);
     pushObject2D(player, world);
 
-    //^ [NOTA] Os objetos talvez não sejam libertados após o push 
-
 }
 
 int main(void)
