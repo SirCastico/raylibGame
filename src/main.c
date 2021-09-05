@@ -5,13 +5,14 @@
 #include "struct.h"
 #include "physics.h"
 #include "draw.h"
-
+#include "sMath.h"
 
 void initAndPushObjectsToWorld(World2D *world){
     Object2D rect = {
         .position = {0, 0},
         .velocity = {0, 0},
         .size = {50, 50},
+        .collision = {NULL,0},
         .color = BLACK,
         .tag = NOTPLAYER,
         .shape = RECT
@@ -20,6 +21,7 @@ void initAndPushObjectsToWorld(World2D *world){
         .position = {world->screen.x/2, world->screen.y/2},
         .velocity = {0, 0},
         .size = {10, 0},
+        .collision = {NULL,0},
         .color = RED,
         .tag = PLAYER,
         .shape = CIRCLE
@@ -60,4 +62,3 @@ int main(void)
 
     return 0;
 }
-

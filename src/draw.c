@@ -1,5 +1,6 @@
 #include "../include/raylib.h"
 #include "struct.h"
+#include "sMath.h"
 
 //TODO: BETTER DRAWING
 

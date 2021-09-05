@@ -2,12 +2,7 @@
 #include "struct.h"
 #include <stdlib.h>
 #include <stdio.h>
-
-Object2D moveObject2D(Object2D object, float delta);
-void physicsProcess(World2D *world, float delta, float *nTick);
-void updateWorldObjectsPosition(World2D *world, float phTick);
-Vector2 getInputForce();
-void updatePlayerObjForceWithInput(Object2D *player, float speed);
+#include "sMath.h"
 
 
 Object2D moveObject2D(Object2D object, float delta){
@@ -44,6 +39,54 @@ void updateWorldObjectsPosition(World2D *world, float phTick){
         i++;
     }
 }
+
+Object2D addCollisionLayerToObject(Object2D obj, int layer){
+    if(!obj.collision.layers){
+        obj.collision.layers = malloc(sizeof(int));
+        obj.collision.layerLen = 0;
+    }
+
+    obj.collision.layerLen += 1;
+    obj.collision.layers[obj.collision.layerLen] = layer;
+
+    return obj;
+}
+
+Object2D removeCollisionLayerFromObject(Object2D obj, int layer){
+    int i=0;
+    if(obj.collision.layers){
+        while(i<obj.collision.layerLen){
+            if(obj.collision.layers[i]==layer){
+                removeIndexFromIntArray(obj.collision.layers, &obj.collision.layerLen, i);
+                break;
+            }
+            i++;
+        }
+    }
+
+    return obj;
+}
+
+int doObjectsCollide(Object2D obj1, Object2D obj2){
+    int r=0, i=0;
+
+    if(obj1.collision.layers && obj2.collision.layers){
+        while(i < obj1.collision.layerLen){
+            if(isIntOnIntArray(obj1.collision.layers[i], obj2.collision.layers, obj2.collision.layerLen)) {
+                r=1;
+                break;
+            }
+            i++;
+        }
+    }
+    return r;
+}
+
+// [TODO]
+void collisionHandler(World2D *world){
+    
+}
+
 void physicsProcess(World2D *world, float delta, float *nTick){
     float phTick = 1.0/60;
 
@@ -52,6 +95,6 @@ void physicsProcess(World2D *world, float delta, float *nTick){
 
     while(*nTick>=1){
         updateWorldObjectsPosition(world, phTick);
-        *nTick = *nTick - 1;
+        (*nTick)--;
     }
 }
