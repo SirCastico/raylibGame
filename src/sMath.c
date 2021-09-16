@@ -1,4 +1,4 @@
-#include "../include/raylib.h"
+#include "raylib.h"
 #include <math.h>
 #include <stdlib.h>
 #include "struct.h"
@@ -12,7 +12,7 @@ int *removeIndexFromIntArray(int *arr, int *len, int ind){
             ind++;
         }
         if(*len)
-            arr = realloc(arr, *len * sizeof(int));
+            arr = (int*)realloc(arr, *len * sizeof(int));
         else
             arr = NULL;
     }

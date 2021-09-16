@@ -1,4 +1,4 @@
-#include "../include/raylib.h"
+#include "raylib.h"
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -10,29 +10,12 @@ Vector2 newVector(float x, float y){
     return (Vector2) {x,y};
 }
 
-Object2D newObject2D(float posX, float posY, float velX, float velY, float width, float height, Color color, ObjectTag tag, ObjectShape shape){
-    Object2D object = {
-        .position.x = posX,
-        .position.y = posY,
-        .velocity.x = velX,
-        .velocity.y = velY,
-        .size.x = width,
-        .size.y = height,
-        .color = color,
-        .tag = tag,
-        .shape = shape
-    };
-
-    return object;
-}
-
 Object2D initObject2D(){
     Object2D obj = {
         .position = {0,0},
         .velocity = {0,0},
         .size = {0,0},
-        .collision.layers = NULL,
-        .collision.layerLen = 0,
+        .collision = {NULL, -1},
         .color = RED,
         .tag = NOTPLAYER,
         .shape = NONE
@@ -44,9 +27,9 @@ Object2D initObject2D(){
 
 World2D newWorld2D(Vector2 screen){
     World2D world = {
-        .screen = screen,
         .objects = NULL,
-        .objListLen = -1
+        .objListTop = -1,
+        .screen = screen
     };
 
     return world;
@@ -54,9 +37,9 @@ World2D newWorld2D(Vector2 screen){
 
 void pushObject2D(Object2D object, World2D *world){
     if(world){
-        world->objListLen += 1;
-        world->objects = realloc(world->objects, sizeof(Object2D)*(world->objListLen + 1));
-        world->objects[world->objListLen] = object;
+        world->objListTop += 1;
+        world->objects = (Object2D*)realloc(world->objects, sizeof(Object2D)*(world->objListTop + 1));
+        world->objects[world->objListTop] = object;
     }
 }
 
@@ -72,7 +55,7 @@ void printTag(Object2D obj){
 }
 
 void printObjTag(World2D world){
-    int i = world.objListLen;
+    int i = world.objListTop;
 
     while(i>-1){
         printf("%d ", i);
@@ -83,7 +66,7 @@ void printObjTag(World2D world){
 }
 
 Object2D *getPlayerFromWorld2D(World2D world){
-    int i = world.objListLen;
+    int i = world.objListTop;
     while(i>-1){
         if(world.objects[i].tag == PLAYER)
             return &world.objects[i];

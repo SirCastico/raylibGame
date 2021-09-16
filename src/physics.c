@@ -1,4 +1,4 @@
-#include "../include/raylib.h"
+#include "raylib.h"
 #include "struct.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -32,7 +32,7 @@ void updateWorldObjectsPosition(World2D *world, float phTick){
     int i=0;
     int playerSpeed = 200;
 
-    while(i<=world->objListLen){
+    while(i<=world->objListTop){
         if(world->objects[i].tag == PLAYER)
             updatePlayerObjForceWithInput(&world->objects[i], playerSpeed);
         world->objects[i] = moveObject2D(world->objects[i], phTick);
@@ -41,13 +41,10 @@ void updateWorldObjectsPosition(World2D *world, float phTick){
 }
 
 Object2D addCollisionLayerToObject(Object2D obj, int layer){
-    if(!obj.collision.layers){
-        obj.collision.layers = malloc(sizeof(int));
-        obj.collision.layerLen = 0;
-    }
-
-    obj.collision.layerLen += 1;
-    obj.collision.layers[obj.collision.layerLen] = layer;
+    obj.collision.layersTop += 1;
+    obj.collision.layers = realloc(obj.collision.layers, sizeof(int)*(obj.collision.layersTop+1));
+    if(obj.collision.layers)
+        obj.collision.layers[obj.collision.layersTop] = layer;
 
     return obj;
 }
@@ -55,9 +52,9 @@ Object2D addCollisionLayerToObject(Object2D obj, int layer){
 Object2D removeCollisionLayerFromObject(Object2D obj, int layer){
     int i=0;
     if(obj.collision.layers){
-        while(i<obj.collision.layerLen){
+        while(i<=obj.collision.layersTop){
             if(obj.collision.layers[i]==layer){
-                removeIndexFromIntArray(obj.collision.layers, &obj.collision.layerLen, i);
+                removeIndexFromIntArray(obj.collision.layers, &obj.collision.layersTop, i);
                 break;
             }
             i++;
@@ -71,8 +68,8 @@ int doObjectsCollide(Object2D obj1, Object2D obj2){
     int r=0, i=0;
 
     if(obj1.collision.layers && obj2.collision.layers){
-        while(i < obj1.collision.layerLen){
-            if(isIntOnIntArray(obj1.collision.layers[i], obj2.collision.layers, obj2.collision.layerLen)) {
+        while(i <= obj1.collision.layersTop){
+            if(isIntOnIntArray(obj1.collision.layers[i], obj2.collision.layers, obj2.collision.layersTop)) {
                 r=1;
                 break;
             }

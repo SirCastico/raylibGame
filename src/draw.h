@@ -5,6 +5,7 @@
 
 void drawObjCircle(Object2D circle);
 void drawObjRECT(Object2D sq);
-void drawWorld(World2D world);
+void drawWorldToTarget(World2D world, RenderTexture2D target);
+void unloadWorldTextures(World2D world);
 
 #endif
