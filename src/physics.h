@@ -1,12 +1,10 @@
-#include "struct.h"
+#include "ecs.h"
 
 #ifndef __PHYSICS_H__
 #define __PHYSICS_H__
 
-Object2D moveObject2D(Object2D object, float delta);
-void physicsProcess(World2D *world, float delta, float *nTick);
+Entity2D moveObject2D(Entity2D entity, float delta);
 void updateWorldObjectsPosition(World2D *world, float phTick);
-Vector2 getInputForce();
-void updatePlayerObjForceWithInput(Object2D *player, float speed);
+void physicsProcess(World2D *world, float delta, float *nTick);
 
 #endif

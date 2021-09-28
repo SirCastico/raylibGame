@@ -1,35 +1,32 @@
 #include "raylib.h"
-#include "struct.h"
 #include "sMath.h"
 #include <stdio.h>
+#include "ecs.h"
 
-//TODO: BETTER DRAWING
-
-void drawObjCircle(Object2D circle){
-    if(circle.shape == CIRCLE)
-        DrawCircle(circle.position.x, circle.position.y, circle.size.x, circle.color);
+void drawEntCircle(Visual visual, PosVelSize posVelSize){
+    if(visual.shape == CIRCLE)
+        DrawCircle(posVelSize.position.x, posVelSize.position.y, posVelSize.size.x, visual.color);
 }
 
-void drawObjRECT(Object2D sq){
-    if(sq.shape == RECT)
-        DrawRectangle(sq.position.x, sq.position.y, sq.size.x, sq.size.y, sq.color);
+void drawEntRect(Visual visual, PosVelSize posVelSize){
+    if(visual.shape == RECT)
+        DrawRectangle(posVelSize.position.x, posVelSize.position.y, posVelSize.size.x, posVelSize.size.y, visual.color);
 }
 
-void drawObjTex(Object2D obj){
-    if(obj.shape == TEXTURE){
-        DrawTexture(obj.texture, obj.position.x, obj.position.y, obj.color);
-    }
+void drawEntTex(Visual visual, PosVelSize posVelSize){
+    if(visual.shape == CIRCLE)
+        DrawTexture(*visual.texture, posVelSize.position.x, posVelSize.position.y, visual.color);
 }
 
-void unloadWorldTextures(World2D world){
-    int i=0;
-    while(i<=world.objListTop){
-        if(world.objects[i].shape == TEXTURE)
-            UnloadTexture(world.objects[i].texture);
+// void unloadWorldTextures(World2D world){
+//     int i=0;
+//     while(i<=world.objListTop){
+//         if(world.objects[i].shape == TEXTURE)
+//             UnloadTexture(world.objects[i].texture);
 
-        i++;
-    }
-}
+//         i++;
+//     }
+// }
 
 // [NOTA] isto desenha os objetos de um mundo do inicio da lista para o fim; os objetos do inicio ficam por baixo dos
 // do fim; desenha tudo na textura target
@@ -38,10 +35,14 @@ void drawWorldToTarget(World2D world, RenderTexture2D target){
 
     BeginTextureMode(target);
         ClearBackground(RAYWHITE);
-        while(i<=world.objListTop){
-            drawObjCircle(world.objects[i]);
-            drawObjRECT(world.objects[i]);
-            drawObjTex(world.objects[i]);
+        while(i<=world.entListTop){
+            Visual *visual = world.entities[i].compArr[COMP_VISUAL];
+            PosVelSize *posVelSize = world.entities[i].compArr[COMP_POSVELSIZE];
+            if(visual && posVelSize){
+                drawEntCircle(*visual,*posVelSize);
+                drawEntRect(*visual,*posVelSize);
+                drawEntTex(*visual,*posVelSize);
+            }
             i++;
         }
     EndTextureMode();

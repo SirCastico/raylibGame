@@ -1,4 +1,4 @@
-#include "struct.h"
+#include "ecs.h"
 
 #ifndef __SMATH_H_
 #define __SMATH_H_

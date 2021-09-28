@@ -1,7 +1,6 @@
 #include "raylib.h"
 #include <math.h>
 #include <stdlib.h>
-#include "struct.h"
 #include <stdio.h>
 
 int *removeIndexFromIntArray(int *arr, int *len, int ind){

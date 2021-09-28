@@ -2,41 +2,23 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
-#include "struct.h"
+#include "ecs.h"
 #include "physics.h"
 #include "draw.h"
 #include "sMath.h"
 
-void initAndPushObjectsToWorld(World2D *world){
-    Object2D rect = {
-        .position = {0, 0},
-        .velocity = {0, 0},
-        .size = {50, 50},
-        .collision = {NULL,0},
-        .color = BLACK,
-        .tag = NOTPLAYER,
-        .shape = RECT
-    };
-    Object2D player = {
-        .position = {world->screen.x/2, world->screen.y/2},
-        .velocity = {0, 0},
-        .size = {10, 0},
-        .collision = {NULL,0},
-        .texture = LoadTexture("assets/playerShipIdle.png"),
-        .color = WHITE,
-        .tag = PLAYER,
-        .shape = TEXTURE
-    };
+void initAndPushEntitiesToWorld(World2D *world){
+    Entity2D player = entity2DInit(PLAYER);
+    player = createPosVelSizeComp(player, (Vector2){20,20}, (Vector2){1,1}, (Vector2){20,20});
+    player = createVisualComp(player, NULL, RED, CIRCLE);
 
-    pushObject2D(rect, world);
-    pushObject2D(player, world);
-
+    pushEntity2D(&player, world);
 }
 
 int main(void)
 {
     const Vector2 screen = {.x=800, .y=450};
-    World2D world = newWorld2D(screen);
+    World2D world = world2DInit(screen);
 
     float delta;
     float nTick = -1;
@@ -55,7 +37,7 @@ int main(void)
 
     SetTargetFPS(60);
 
-    initAndPushObjectsToWorld(&world);
+    initAndPushEntitiesToWorld(&world);
 
     while (!WindowShouldClose())
     {   
@@ -80,7 +62,7 @@ int main(void)
         EndDrawing();
     }
     UnloadRenderTexture(target);
-    unloadWorldTextures(world);
+    //unloadWorldTextures(world);
     CloseWindow();
 
     return 0;
