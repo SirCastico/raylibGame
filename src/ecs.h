@@ -55,11 +55,14 @@ World2D world2DInit(Vector2 screen);
 void pushEntity2D(Entity2D *entity, World2D *world);
 void removeWorld2DEntity(World2D *world,int ind);
 Entity2D *getPlayerFromWorld2D(World2D world);
-Entity2D createPosVelSizeComp(Entity2D entity, Vector2 pos, Vector2 vel, Vector2 size);
+PosVelSize *createPosVelSizeComp(Vector2 pos, Vector2 vel, Vector2 size);
 Collision *createCollisionComp(int *layers, int layersTop);
-Entity2D createVisualComp(Entity2D entity, Texture2D *texture, Color color, EntityShape shape);
+Visual *createVisualComp(Texture2D *texture, Color color, EntityShape shape);
 void addPosVelSizeComp(PosVelSize *comp, Entity2D *ent);
 void addCollisionComp(Collision *comp, Entity2D *ent);
 void addVisualComp(Visual *comp, Entity2D *ent);
+PosVelSize *getPosVelSizeComp(Entity2D ent);
+Collision *getCollisionComp(Entity2D ent);
+Visual *getVisualComp(Entity2D ent);
 
 #endif

@@ -14,7 +14,7 @@ void drawEntRect(Visual visual, PosVelSize posVelSize){
 }
 
 void drawEntTex(Visual visual, PosVelSize posVelSize){
-    if(visual.shape == CIRCLE)
+    if(visual.shape == TEXTURE)
         DrawTexture(*visual.texture, posVelSize.position.x, posVelSize.position.y, visual.color);
 }
 
@@ -32,16 +32,20 @@ void drawEntTex(Visual visual, PosVelSize posVelSize){
 // do fim; desenha tudo na textura target
 void drawWorldToTarget(World2D world, RenderTexture2D target){
     int i = 0;
-
     BeginTextureMode(target);
         ClearBackground(RAYWHITE);
         while(i<=world.entListTop){
-            Visual *visual = world.entities[i].compArr[COMP_VISUAL];
-            PosVelSize *posVelSize = world.entities[i].compArr[COMP_POSVELSIZE];
+            Visual *visual = getVisualComp(world.entities[i]);
+            PosVelSize *posVelSize = getPosVelSizeComp(world.entities[i]);
+
             if(visual && posVelSize){
+                //printf("Begin Drawing\n");
                 drawEntCircle(*visual,*posVelSize);
+                //printf("1");
                 drawEntRect(*visual,*posVelSize);
+                //printf(" 2");
                 drawEntTex(*visual,*posVelSize);
+                //printf(" 3\n");
             }
             i++;
         }

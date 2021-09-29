@@ -7,10 +7,12 @@
 #include "draw.h"
 #include "sMath.h"
 
+// [TODO] Good Logging, investigate stuttering on low speed movement
+
 void initAndPushEntitiesToWorld(World2D *world){
     Entity2D player = entity2DInit(PLAYER);
-    player = createPosVelSizeComp(player, (Vector2){20,20}, (Vector2){1,1}, (Vector2){20,20});
-    player = createVisualComp(player, NULL, RED, CIRCLE);
+    addPosVelSizeComp(createPosVelSizeComp((Vector2){20,20}, (Vector2){4,4}, (Vector2){20,20}), &player);
+    addVisualComp(createVisualComp(NULL, RED, CIRCLE), &player);
 
     pushEntity2D(&player, world);
 }
@@ -19,6 +21,7 @@ int main(void)
 {
     const Vector2 screen = {.x=800, .y=450};
     World2D world = world2DInit(screen);
+    printf("World Init\n");
 
     float delta;
     float nTick = -1;
@@ -38,6 +41,7 @@ int main(void)
     SetTargetFPS(60);
 
     initAndPushEntitiesToWorld(&world);
+    printf("Push Entities\n");
 
     while (!WindowShouldClose())
     {   
@@ -46,8 +50,10 @@ int main(void)
         delta = GetFrameTime();
 
         physicsProcess(&world, delta, &nTick);
+        //printf("PhysicsProcess\n");
         
         drawWorldToTarget(world,target);
+        //printf("Draw World\n");
 
         BeginDrawing();
             ClearBackground(BLACK);

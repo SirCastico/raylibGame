@@ -42,15 +42,13 @@ void removeWorld2DEntity(World2D *world,int ind){
     }
 }
 
-Entity2D createPosVelSizeComp(Entity2D entity, Vector2 pos, Vector2 vel, Vector2 size){
-    PosVelSize *comp = malloc(sizeof(PosVelSize));
-    comp->position = pos;
-    comp->velocity = vel;
-    comp->size = size;
+PosVelSize *createPosVelSizeComp(Vector2 pos, Vector2 vel, Vector2 size){
+    PosVelSize *r = malloc(sizeof(PosVelSize));
+    r->position = pos;
+    r->velocity = vel;
+    r->size = size;
 
-    entity.compArr[COMP_POSVELSIZE] = comp;
-
-    return entity;
+    return r;
 }
 
 Collision *createCollisionComp(int *layers, int layersTop){
@@ -61,15 +59,13 @@ Collision *createCollisionComp(int *layers, int layersTop){
     return r;
 }
 
-Entity2D createVisualComp(Entity2D entity, Texture2D *texture, Color color, EntityShape shape){
-    Visual *comp = malloc(sizeof(Visual));
-    comp->texture = texture;
-    comp->color = color;
-    comp->shape = shape;
+Visual *createVisualComp(Texture2D *texture, Color color, EntityShape shape){
+    Visual *r = malloc(sizeof(Visual));
+    r->texture = texture;
+    r->color = color;
+    r->shape = shape;
 
-    entity.compArr[COMP_VISUAL] = comp;
-
-    return entity;
+    return r;
 }
 
 void addPosVelSizeComp(PosVelSize *comp, Entity2D *ent){
@@ -83,6 +79,22 @@ void addCollisionComp(Collision *comp, Entity2D *ent){
 void addVisualComp(Visual *comp, Entity2D *ent){
     ent->compArr[COMP_VISUAL] = comp;
 }
+
+PosVelSize *getPosVelSizeComp(Entity2D ent){
+    PosVelSize *r = ent.compArr[COMP_POSVELSIZE];
+    return r;
+}
+
+Collision *getCollisionComp(Entity2D ent){
+    Collision *r = ent.compArr[COMP_COLLISION];
+    return r;
+}
+
+Visual *getVisualComp(Entity2D ent){
+    Visual *r = ent.compArr[COMP_VISUAL];
+    return r;
+}
+
 
 Entity2D *getPlayerFromWorld2D(World2D world){
     int i = world.entListTop;

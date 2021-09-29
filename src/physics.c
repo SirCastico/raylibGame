@@ -13,7 +13,7 @@ Entity2D moveObject2D(Entity2D entity, float delta){
 
 void updateWorldObjectsPosition(World2D *world, float phTick){
     int i=0;
-    int playerSpeed = 200;
+    //int playerSpeed = 200;
 
     while(i<=world->entListTop){
 //        if(world->objects[i].tag == PLAYER)
