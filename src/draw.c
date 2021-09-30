@@ -3,19 +3,19 @@
 #include <stdio.h>
 #include "ecs.h"
 
-void drawEntCircle(Visual visual, PosVelSize posVelSize){
+void drawEntCircle(Visual visual, Transform2D transform2D){
     if(visual.shape == CIRCLE)
-        DrawCircle(posVelSize.position.x, posVelSize.position.y, posVelSize.size.x, visual.color);
+        DrawCircle(transform2D.position.x, transform2D.position.y, transform2D.size.x, visual.color);
 }
 
-void drawEntRect(Visual visual, PosVelSize posVelSize){
+void drawEntRect(Visual visual, Transform2D transform2D){
     if(visual.shape == RECT)
-        DrawRectangle(posVelSize.position.x, posVelSize.position.y, posVelSize.size.x, posVelSize.size.y, visual.color);
+        DrawRectangle(transform2D.position.x, transform2D.position.y, transform2D.size.x, transform2D.size.y, visual.color);
 }
 
-void drawEntTex(Visual visual, PosVelSize posVelSize){
+void drawEntTex(Visual visual, Transform2D transform2D){
     if(visual.shape == TEXTURE)
-        DrawTexture(*visual.texture, posVelSize.position.x, posVelSize.position.y, visual.color);
+        DrawTexture(*visual.texture, transform2D.position.x, transform2D.position.y, visual.color);
 }
 
 // void unloadWorldTextures(World2D world){
@@ -35,16 +35,16 @@ void drawWorldToTarget(World2D world, RenderTexture2D target){
     BeginTextureMode(target);
         ClearBackground(RAYWHITE);
         while(i<=world.entListTop){
-            Visual *visual = getVisualComp(world.entities[i]);
-            PosVelSize *posVelSize = getPosVelSizeComp(world.entities[i]);
+            Component visual = world.compMat[COMP_VISUAL][i];
+            Component transform2D = world.compMat[COMP_TRANSFORM2D][i];
 
-            if(visual && posVelSize){
+            if(visual.compType > -1 && transform2D.compType > -1){
                 //printf("Begin Drawing\n");
-                drawEntCircle(*visual,*posVelSize);
+                drawEntCircle(visual.visual,transform2D.transform2D);
                 //printf("1");
-                drawEntRect(*visual,*posVelSize);
+                drawEntRect(visual.visual,transform2D.transform2D);
                 //printf(" 2");
-                drawEntTex(*visual,*posVelSize);
+                drawEntTex(visual.visual,transform2D.transform2D);
                 //printf(" 3\n");
             }
             i++;

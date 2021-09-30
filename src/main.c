@@ -11,10 +11,16 @@
 
 void initAndPushEntitiesToWorld(World2D *world){
     Entity2D player = entity2DInit(PLAYER);
-    addPosVelSizeComp(createPosVelSizeComp((Vector2){20,20}, (Vector2){4,4}, (Vector2){20,20}), &player);
-    addVisualComp(createVisualComp(NULL, RED, CIRCLE), &player);
-
     pushEntity2D(&player, world);
+    addComponent(   createTransform2DComp((Vector2) {20,20}, (Vector2) {5,5}, (Vector2) {20,20}),
+                    player, 
+                    world
+                );
+
+    addComponent(   createVisualComp(NULL, RED, CIRCLE),
+                    player, 
+                    world
+                );
 }
 
 int main(void)

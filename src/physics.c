@@ -4,11 +4,10 @@
 #include "sMath.h"
 #include "ecs.h"
 
-Entity2D moveObject2D(Entity2D entity, float delta){
-    PosVelSize *posVelSize = (entity.compArr[COMP_POSVELSIZE]);
-    posVelSize->position = vector2Sum(posVelSize->position, floatVector2Mult(delta, posVelSize->velocity));
+Component moveEntity2D(Component comp, float delta){
+    comp.transform2D.position = vector2Sum(comp.transform2D.position, floatVector2Mult(delta, comp.transform2D.velocity));
 
-    return entity;
+    return comp;
 }
 
 void updateWorldObjectsPosition(World2D *world, float phTick){
@@ -18,7 +17,7 @@ void updateWorldObjectsPosition(World2D *world, float phTick){
     while(i<=world->entListTop){
 //        if(world->objects[i].tag == PLAYER)
 //            updatePlayerObjForceWithInput(&world->objects[i], playerSpeed);
-        world->entities[i] = moveObject2D(world->entities[i], phTick);
+        world->compMat[COMP_TRANSFORM2D][i] = moveEntity2D(world->compMat[COMP_TRANSFORM2D][i], phTick);
         i++;
     }
 }
